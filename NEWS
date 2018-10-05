@@ -1,0 +1,9 @@
+vim: set tw=72 :
+
+			      ==[ News ]==
+
+2018-10-05:  I'm starting the collect the U5 ultilities into a single,
+autotool'ed repository.  The first entry is "sav", which cheats on the
+more boring inventory aspects of the game by giving your party lots of
+food, keys, torches, etc.
+

@@ -1,3 +1,122 @@
 #!@lua@
 
-print("@cmddir@")
+print ("Ultima V Saved Game Adjuster\n");
+
+-- determine what we are changing
+local parts = {
+   keys=false,   gems=false, torches=false,
+   health=false, food=false, gold=false,
+   keys=false,   spells=false, skullkeys=false
+}
+
+-- if no arguments given, change everything!
+if #arg == 0 then
+  for x in pairs (parts) do
+    parts[x] = true
+  end
+end
+
+-- run through the arguments, marking what to change
+for _,x in ipairs (arg) do
+  x = x:lower ()
+  if parts[x] == nil then
+    print ("UNKNOWN ARG: ", x)
+    os.exit (1)
+  else
+    parts[x] = true
+  end
+end
+
+-- backup the original
+local fname = 'saved.gam'
+local bak = fname:gsub ('%.gam$','.bak')
+
+print ("Backing up:", fname, "to", bak)
+local cpresult = os.execute (string.format ("cp '%s' '%s'", fname, bak))
+if not cpresult then
+    print ("Backup failed! Quitting.", cpresult)
+    os.exit (cpresult)
+end
+
+local game = io.open (fname, "r+b")
+local bytes9999 = string.pack ('<i2', 9999)
+local bytes99   = string.char (99)
+
+-- **************************************************
+if parts.health then
+  print ('Adjusting health')
+  local STATS_LEN = 32
+  game:seek ('set', 2)
+
+  for idx = 1,16 do
+    local block = game:read (STATS_LEN)
+    local fixed = table.concat {
+      block:sub (1, 0x0B),
+      'G',
+      block:sub (0x0D, 0x10),
+      block:sub (0x13, 0x14),
+      block:sub (0x13)
+    }
+    game:seek ('cur', -STATS_LEN)
+    game:write (fixed)
+  end
+end
+
+-- **************************************************
+if parts.food then
+  print ('Adjusting food')
+  game:seek ('set', 0x202)
+  game:write (bytes9999)
+end
+
+-- **************************************************
+if parts.gold then
+  print ('Adjusting gold')
+  game:seek ('set', 0x204)
+  game:write (bytes9999)
+end
+
+-- **************************************************
+if parts.keys then
+  print ('Adjusting keys')
+  game:seek ('set', 0x206)
+  game:write (bytes99)
+end
+
+-- **************************************************
+if parts.gems then
+  print ('Adjusting gems')
+  game:seek ('set', 0x207)
+  game:write (bytes99)
+end
+
+-- **************************************************
+if parts.torches then
+  print ('Adjusting torches')
+  game:seek ('set', 0x208)
+  game:write (bytes99)
+end
+
+-- **************************************************
+if parts.skullkeys then
+  print ('Adjusting skullkeys')
+  game:seek ('set', 0x20B)
+  game:write (bytes99)
+end
+
+-- **************************************************
+if parts.spells then
+  print ('Adjusting spells')
+  game:seek ('set', 0x24A)
+  game:write (bytes99:rep (64))
+end
+
+-- **************************************************
+for x in pairs (parts) do
+  if not parts[x] then
+    print ("Not adjusting:", x)
+  end
+end
+
+print ('Done!')
+game:close ()
