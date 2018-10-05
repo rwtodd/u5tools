@@ -1,6 +1,7 @@
 SUBDIRS=u5sav
 bin_SCRIPTS=u5tools
 CLEANFILES=u5tools
+EXTRA_DIST=LICENSE u5tools.in
 
 replace=sed -e 's|@cmddir[@]|$(cmddir)|g'
 
