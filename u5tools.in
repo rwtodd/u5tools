@@ -1,12 +1,18 @@
 #!/bin/sh
 
 PROG="@cmddir@/$1"
-if [ -x $PROG ]
+
+if [ -f "$PROG" -a -x "$PROG" ]
 then
   shift
   exec $PROG $@
 else
-  echo "Can't find program $PROG!"
+  if [ "$1" = "" ]
+  then
+    echo "No subcommand given!"
+  else
+    echo "Can't find sucommand $1!"
+  fi
   echo ""
   echo "Available commands:"
   ls -1 @cmddir@
