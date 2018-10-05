@@ -1,0 +1,16 @@
+#!/bin/sh
+
+PROG="@cmddir@/$1"
+if [ -x $PROG ]
+then
+  shift
+  exec $PROG $@
+else
+  echo "Can't find program $PROG!"
+  echo ""
+  echo "Available commands:"
+  ls -1 @cmddir@
+  echo ""
+  echo "Run: info u5tools to learn about available commands."
+  exit 1
+fi
