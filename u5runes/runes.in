@@ -1,0 +1,248 @@
+#!@lua@
+-- vim: set sw=2 softtabstop=2 expandtab :
+local rune_width = setmetatable({ i=3, l=5, ea=9 },
+                                { __index = function(key) return 7 end })
+
+local DEFAULT_RUNE_HEIGHT = 10
+
+local function
+calc_line_width (line)
+  local w = 0
+  for _, r in ipairs (line) do
+    w = w + rune_width[r]
+  end
+  return w
+end
+
+local rune_svg = {
+   space=[[<g id="rune-space" fill="none" >
+    <polyline points="2,5 2.5,4 3,5 2.5,6 2,5 2.5,4" />
+  </g>]],
+   a=[[<g id="rune-a" fill="none" >
+    <polyline points="0,10 0,0.5 5,5" />
+    <polyline points="0,3 4,7" />
+  </g>]],
+   b=[[<g id="rune-b" fill="none">
+    <polyline points="0,9.5 0,0.5 3.5,3 2.5,5 5,7 0,9.5 0,0.5" />
+  </g>]],
+   c=[[<g id="rune-c" fill="none">
+    <polyline points="0,10 1.5,0" />
+    <polyline points="1.1,4.8 5,10" />
+  </g>]],
+   d=[[<g id="rune-d" fill="none">
+    <polyline points="0,1 5,9 5,1 0,9, 0,1 2.5,5" />
+  </g>]],
+   e=[[<g id="rune-e" fill="none">
+    <polyline points="0,10 0.7,0.5 2.5,3 4.3,0.5, 5,10" />
+  </g>]],
+   f=[[<g id="rune-f" fill="none">
+    <polyline points="0,10 0,0" />
+    <polyline points="0,6.5 3,6.5 5,4.5 5,0" />
+    <polyline points="0,4 1.5,4 2.5,3 2.5,0" />
+  </g>]],
+   g=[[<g id="rune-g" fill="none">
+    <polyline points="0,10 5,0" />
+    <polyline points="0,0 5,10" />
+  </g>]],
+   h=[[<g id="rune-h" fill="none">
+    <polyline points="0,10 0,0.5 4.2,3 0,7" />
+  </g>]],
+   i=[[<g id="rune-i" fill="none">  <!-- width 3 -->
+    <polyline points="0,10 0,0 0.1,0 0,10" />
+  </g>]],
+   j=[[<g id="rune-j" fill="none"> 
+    <polyline points="2.5,10 2.5,0" />
+    <polyline points="2.5,0 4.5,3 2.5,6.5 0.5,3 2.5,0.5 4.5,3" />
+  </g>]],
+   k=[[<g id="rune-k" fill="none">
+    <polyline points="0,10 1.5,0" />
+    <polyline points="1.1,4.8 3,5.5 5,10" />
+  </g>]],
+   l=[[<g id="rune-l" fill="none"> <!-- width 5 -->
+    <polyline points="0,10 0,0.5 3,5" />
+  </g>]],
+   m=[[<g id="rune-m" fill="none">
+    <polyline points="0,10 0.7,0.5 4.7,7" />
+    <polyline points="5,10 4.3,0.5 0.3,7" />
+  </g>]],
+   n=[[<g id="rune-n" fill="none"> 
+    <polyline points="2.5,10 2.5,0" />
+    <polyline points="0,4 5,7" />
+  </g>]],
+   o=[[<g id="rune-o" fill="none" >
+    <polyline points="0,10 0,0.5 2.5,3 5,0" />
+    <polyline points="0,3 2.5,6 5,3" />
+  </g>]],
+   p=[[<g id="rune-p" fill="none" >
+    <polyline points="0,10 0,0" />
+    <polyline points="0,4.5 2.5,4.5 3.5,3.5 5,0" />
+    <polyline points="0,6 2.5,6.5 3.5,7.5 5,10" />
+  </g>]],
+   q=[[<g id="rune-q" fill="none" >
+    <polyline points="0,10 0,0" />
+    <polyline points="0,4.5 2.5,4.5 3.5,3.5 5,0" />
+  </g>]],
+   r=[[<g id="rune-r" fill="none">
+    <polyline points="0,10 0,0.5 4.2,3.5 1.5,6 5,10" />
+  </g>]],
+   s=[[<g id="rune-s" fill="none">
+    <polyline points="0,0 0,6 5,3.5 5,10" />
+  </g>]],
+   t=[[<g id="rune-t" fill="none">
+    <polyline points="2.5,0.5 2.5,10" />
+    <polyline points="0,3.5 2.5,0.5 5,3.5" />
+  </g>]],
+   u=[[<g id="rune-u" fill="none">
+    <polyline points="0,10 0.7,0.5 4.5,3.5 5,10" />
+  </g>]],
+   v=[[<g id="rune-v" fill="none">
+    <polyline points="0,10 2.5,1 5,10" />
+  </g>]],
+   w=[[<g id="rune-w" fill="none">
+    <polyline points="0,10 0,0" />
+    <polyline points="5,10 5,0" />
+    <polyline points="0,2 5,6" />
+    <polyline points="0,4 5,8" />
+  </g>]],
+   x=[[<g id="rune-x" fill="none">
+    <polyline points="2.5,0.5 2.5,10" />
+    <polyline points="0,10 2.5,7 5,10" />
+  </g>]],
+   y=[[<g id="rune-y" fill="none">
+    <polyline points="0,10 0.7,0.5 4.5,3.5 5,10" />
+    <polyline points="0.5,3 4.8,6" />
+    <polyline points="2.5,4.5 2.5,10" />
+  </g>]],
+   z=[[<g id="rune-z" fill="none">
+    <polyline points="2.5,0 2.5,10" />
+    <polyline points="0,0 2.5,4.5 5,0" />
+  </g>]],
+   th=[[<g id="rune-th" fill="none">
+    <polyline points="0,10 0,0" />
+    <polyline points="0,2.5 4.5,5 0,7.5" />
+  </g>]],
+   ee=[[<g id="rune-ee" fill="none">
+    <polyline points="0,10 5,5 0,0" />
+    <polyline points="5,10 0,5 5,0" />
+  </g>]],
+   ng=[[<g id="rune-ng" fill="none">
+    <polyline points="0,10 4.5,4 2.5,0.5 0.5,4 4.5,10" />
+  </g>]],
+   ea=[[<g id="rune-ea" fill="none"> <!-- width 9 -->
+    <polyline points="3.5,0.5 3.5,10" />
+    <polyline points="0,0 1.75,3.5 3.5,0.5 5.25,3.5 7,0" />
+  </g>]],
+   st=[[<g id="rune-st" fill="none"> 
+    <polyline points="0,0.5 0,9.5 2.5,7 5,9.5 5,0.5 2.5,3 0,0.5 0,8 " />
+  </g>]],
+}
+
+local function
+print_header (x, y, used)
+  print (
+    string.format (
+      [[<svg viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg">]],
+      x,
+      y))
+  print ([[<defs>
+  <filter id="dropsh" x="-5" y="-5" width="20" height="20">
+    <feOffset result="offOut" in="SourceAlpha" dx="0.2" dy="0.2" />
+    <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+  </filter>]])
+  for r in pairs (used) do
+     print (rune_svg[r])
+  end
+  print ([[</defs>
+<g filter="url(#dropsh)" stroke-width="1" stroke="brown">]])
+end
+
+local function
+print_footer ()
+  print ([[</g></svg>]])
+end
+
+local function
+place_rune (rune, x, y)
+  print (
+    string.format (
+      [[<use href="#rune-%s" x="%f" y="%f" />]],
+      rune,
+      x,
+      y))
+end
+
+local function 
+print_svg (lines, used)
+  local size_x = 0
+  local size_y = 0
+  local widths = {}
+  for _,l in ipairs(lines) do
+    local w = calc_line_width (l)
+    table.insert(widths, w)
+    size_y = size_y + 13
+  end
+  size_x = math.max (table.unpack (widths)) + 2
+
+  print_header (size_x, size_y, used)
+
+  local y = 1
+  for idx, line in ipairs (lines) do
+    -- determine the centered location of the line
+    local x = (size_x - widths[idx]) / 2
+    for _,r in ipairs (line) do
+       place_rune (r, x, y)
+       x = x + rune_width[r]
+    end
+    y = y + DEFAULT_RUNE_HEIGHT + 2
+  end 
+
+  print_footer ()
+end
+
+-- make a list of all used runes, so that we only
+-- need to put the used characters in the output
+local function
+gather_used (lines) 
+  local used = { }
+  for _, l in pairs (lines) do
+    for _, r in pairs (l) do
+      used[r] = true
+    end
+  end
+  return used
+end
+
+
+-- break a line of text into a table of rune names.
+-- Ignores non-alpha characters, and trims the line
+-- of excess spaces.
+function
+split_line (line)
+  line = line:gsub ("%A+"," ")
+    :gsub ("^ ","")
+    :gsub (" $","")
+    :lower ()
+  local runes = { }
+  local idx = 2
+
+  while idx <= (#line + 1) do
+    local current = line:sub(idx-1,idx)
+    if rune_svg[current] then
+      table.insert(runes,current)
+      idx = idx + 2
+    else
+      current = current:sub(1,1)
+      table.insert(runes, current == " " and "space" or current)
+      idx = idx + 1
+    end
+  end
+  return runes 
+end
+
+-- ****************************************************************************
+-- The main program:
+local input = { }
+for l in io.lines () do
+  table.insert (input, split_line (l))
+end
+print_svg (input, gather_used (input))

@@ -23,5 +23,7 @@ AC_SUBST([cmddir],[${bindir}/u5tools-cmd])
 # Checks for header files.
 # AC_CHECK_HEADERS([fcntl.h stdint.h unistd.h])
 
-AC_CONFIG_FILES([Makefile u5sav/Makefile])
+AC_CONFIG_FILES([Makefile 
+                 u5sav/Makefile
+                 u5runes/Makefile])
 AC_OUTPUT
