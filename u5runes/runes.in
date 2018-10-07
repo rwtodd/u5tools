@@ -1,9 +1,16 @@
 #!@lua@
 -- vim: set sw=2 softtabstop=2 expandtab :
+
+-- These are settable with cmdline args
+local config = {
+  fg = "brown",
+  bg = "white",
+  ["stroke-width"] = "1",
+  ["line-height"] = "12",
+}
+
 local rune_width = setmetatable({ i=3, l=5, ea=9 },
                                 { __index = function(key) return 7 end })
-
-local DEFAULT_RUNE_HEIGHT = 10
 
 local function
 calc_line_width (line)
@@ -139,11 +146,12 @@ local rune_svg = {
 
 local function
 print_header (x, y, used)
-  print (
-    string.format (
-      [[<svg viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg">]],
+  print (string.format (
+      [[<svg viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg"
+style="background-color: %s">]],
       x,
-      y))
+      y,
+      config.bg))
   print ([[<defs>
   <filter id="dropsh" x="-5" y="-5" width="20" height="20">
     <feOffset result="offOut" in="SourceAlpha" dx="0.2" dy="0.2" />
@@ -152,8 +160,11 @@ print_header (x, y, used)
   for r in pairs (used) do
      print (rune_svg[r])
   end
-  print ([[</defs>
-<g filter="url(#dropsh)" stroke-width="1" stroke="brown">]])
+  local group_opts = string.format (
+    [[stroke-width="%s" stroke="%s" ]],
+    config["stroke-width"],
+    config.fg)
+  print ([[</defs> <g filter="url(#dropsh)" ]] .. group_opts .. ">")
 end
 
 local function
@@ -173,15 +184,14 @@ end
 
 local function 
 print_svg (lines, used)
-  local size_x = 0
-  local size_y = 0
   local widths = {}
+  local line_height = tonumber(config["line-height"])
   for _,l in ipairs(lines) do
     local w = calc_line_width (l)
     table.insert(widths, w)
-    size_y = size_y + 13
   end
-  size_x = math.max (table.unpack (widths)) + 2
+  local size_x = math.max (table.unpack (widths)) + 2
+  local size_y = (#widths - 1) * line_height + 12
 
   print_header (size_x, size_y, used)
 
@@ -193,7 +203,7 @@ print_svg (lines, used)
        place_rune (r, x, y)
        x = x + rune_width[r]
     end
-    y = y + DEFAULT_RUNE_HEIGHT + 2
+    y = y + line_height
   end 
 
   print_footer ()
@@ -240,7 +250,17 @@ split_line (line)
 end
 
 -- ****************************************************************************
--- The main program:
+-- The main program, step 1: parse args...
+for _,a in ipairs(arg) do
+  local name, setting = a:match("^%-%-(.-)=(.*)$")
+  if name == nil or setting == nil or config[name] == nil then
+    io.stderr:write (string.format ("Unknown argument: [%s]\n", a))
+    os.exit(1)
+  end
+  config[name] = setting
+end
+
+-- The main program, step 1: parse text and produce SVG...
 local input = { }
 for l in io.lines () do
   table.insert (input, split_line (l))
