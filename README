@@ -1,6 +1,15 @@
-vim: set tw=72 :
+vim: set tw=72 expandtab :
 
-			==[ ULTIMA V ~ TOOLS ]==
+                       ==[ About this branch ]==
+
+I originally was working on this project as a cmdline/unix tool, but
+have decided -- as of 2018/10/08 anyway -- to pursue it as a WPF tool
+instead.  Thus, I am putting the original code in a lua-code branch so
+as never to lose it, and starting over in a fresh orphan master branch.
+
+
+
+                        ==[ ULTIMA V ~ TOOLS ]==
 
 This is a set of utilities I used for playing around with the file
 formats in Ultima V: Warriors of Destiny.  In my opinion, it was the

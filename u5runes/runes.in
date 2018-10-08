@@ -260,7 +260,7 @@ for _,a in ipairs(arg) do
   config[name] = setting
 end
 
--- The main program, step 1: parse text and produce SVG...
+-- The main program, step 2: parse text and produce SVG...
 local input = { }
 for l in io.lines () do
   table.insert (input, split_line (l))
