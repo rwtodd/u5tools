@@ -7,9 +7,42 @@
         mc:Ignorable="d"
         Title="Ultima V Runes" Height="450" Width="800">
     <Window.Resources>
-        <Style x:Key="rlines" TargetType="Polyline">
-            <Setter Property="Stroke" Value="{Binding ElementName=FGColor, Path=Text}" />
+        <SolidColorBrush x:Key="RuneColor" Color="{Binding ElementName=FGColor, Path=Text}" />
+        <Style x:Key="RuneLines" TargetType="Polyline">
+            <Setter Property="Stroke" Value="{StaticResource RuneColor}" />
             <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeEndLineCap" Value="Flat" />
+            <Setter Property="StrokeStartLineCap" Value="Flat" />
+            <Setter Property="StrokeLineJoin" Value="Bevel" />
+        </Style>
+        <Style x:Key="CeneteredLine" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Margin" Value="1" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="Rune-d" TargetType="Control">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Control">
+                        <Canvas Width="5" Height="10" Margin="1,0,1,0">
+                            <Polyline Style="{StaticResource RuneLines}"
+                                      Points="0,0 5,10 5,0 0,10 0,0 5,10" />
+                        </Canvas>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Rune-i" TargetType="Control">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Control">
+                        <Canvas Width="0" Height="10" Margin="1,0,1,0">
+                            <Polyline Style="{StaticResource RuneLines}"
+                                      Points="0,0 0,10" />
+                        </Canvas>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
     <Grid>
@@ -34,19 +67,14 @@
                     <DropShadowBitmapEffect Color="Black" Direction="-25" ShadowDepth="10" />
                 </Viewbox.BitmapEffect>
                 <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal" Margin="1" HorizontalAlignment="Center">
-                        <Canvas Width="5" Height="10" Margin="1,0,1,0">
-                            <Polyline Style="{StaticResource rlines}" Points="0,0 5,10" />
-                            <Polyline Style="{StaticResource rlines}" Points="5,0 0,10" />
-                        </Canvas>
-                        <Canvas Width="5" Height="10" Margin="1,0,1,0">
-                            <Polyline Style="{StaticResource rlines}" Points="0,0 5,10" />
-                            <Polyline Style="{StaticResource rlines}" Points="5,0 0,10" />
-                        </Canvas>
+                    <StackPanel Style="{StaticResource CeneteredLine}">
+                        <Control Style="{StaticResource Rune-d}" />
+                        <Control Style="{StaticResource Rune-i}" />
+                        <Control Style="{StaticResource Rune-d}" />
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="1" HorizontalAlignment="Center">
-                        <Polyline Style="{StaticResource rlines}" Points="0,0 10,10" />
-                        <Polyline Style="{StaticResource rlines}" Points="0,0 10,10" />
+                    <StackPanel Style="{StaticResource CeneteredLine}">
+                        <Control Style="{StaticResource Rune-d}" />
+                        <Control Style="{StaticResource Rune-d}" />
                     </StackPanel>
                 </StackPanel>
             </Viewbox>
