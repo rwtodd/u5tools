@@ -62,7 +62,6 @@
                 <TextBox x:Name="ShadDepth" Grid.Row="3" Grid.Column="1">5</TextBox>
 
             </Grid>
-            <Button DockPanel.Dock="Bottom">Save</Button>
             <TextBox x:Name="English" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="TextBox_TextChanged">Hello</TextBox>
         </DockPanel>
         <Border Grid.Row="0" Grid.Column="2" Background="{Binding ElementName=BGColor, Path=Text}">
