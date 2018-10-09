@@ -53,13 +53,17 @@
                 </Viewbox.BitmapEffect>
                 <StackPanel Orientation="Vertical">
                     <StackPanel Style="{StaticResource CeneteredText}">
-                        <Control Style="{StaticResource Rune-d}" />
-                        <Control Style="{StaticResource Rune-i}" />
-                        <Control Style="{StaticResource Rune-d}" />
+                        <Control Style="{StaticResource Rune-l}" />
+                        <Control Style="{StaticResource Rune-o}" />
+                        <Control Style="{StaticResource Rune-st}" />
+                        <Control Style="{StaticResource Rune-space}" />
+                        <Control Style="{StaticResource Rune-w}" />
+                        <Control Style="{StaticResource Rune-e}" />
                     </StackPanel>
                     <StackPanel Style="{StaticResource CeneteredText}">
-                        <Control Style="{StaticResource Rune-d}" />
-                        <Control Style="{StaticResource Rune-d}" />
+                        <Control Style="{StaticResource Rune-a}" />
+                        <Control Style="{StaticResource Rune-r}" />
+                        <Control Style="{StaticResource Rune-e}" />
                     </StackPanel>
                 </StackPanel>
             </Viewbox>
