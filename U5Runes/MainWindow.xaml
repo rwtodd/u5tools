@@ -21,7 +21,7 @@
                         <Setter Property="StrokeStartLineCap" Value="Flat" />
                         <Setter Property="StrokeLineJoin" Value="Bevel" />
                     </Style>
-                    <Style x:Key="CeneteredText" TargetType="StackPanel">
+                    <Style x:Key="CenteredText" TargetType="StackPanel">
                         <Setter Property="Orientation" Value="Horizontal" />
                         <Setter Property="Margin" Value="{StaticResource LineMargin}" />
                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -41,29 +41,44 @@
         </Grid.RowDefinitions>
         <GridSplitter Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" />
         <DockPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
-            <Button DockPanel.Dock="Bottom">What??</Button>
-            <TextBox x:Name="FGColor" DockPanel.Dock="Bottom">Brown</TextBox>
-            <TextBox x:Name="BGColor" DockPanel.Dock="Bottom">Gray</TextBox>
-            <TextBox TextWrapping="Wrap" AcceptsReturn="True">Hello</TextBox>
+            <Grid DockPanel.Dock="Bottom">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="AUTO" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0">Color:</TextBlock>
+                <TextBox x:Name="FGColor" Grid.Row="0" Grid.Column="1">Brown</TextBox>
+                <TextBlock Grid.Row="1" Grid.Column="0">Background:</TextBlock>
+                <TextBox x:Name="BGColor" Grid.Row="1" Grid.Column="1">Gray</TextBox>
+                <TextBlock Grid.Row="2" Grid.Column="0">Shadow Dir:</TextBlock>
+                <TextBox x:Name="ShadDir" Grid.Row="2" Grid.Column="1">-25</TextBox>
+                <TextBlock Grid.Row="3" Grid.Column="0">Shadow Depth:</TextBlock>
+                <TextBox x:Name="ShadDepth" Grid.Row="3" Grid.Column="1">5</TextBox>
+
+            </Grid>
+            <Button DockPanel.Dock="Bottom">Save</Button>
+            <TextBox x:Name="English" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="TextBox_TextChanged">Hello</TextBox>
         </DockPanel>
         <Border Grid.Row="0" Grid.Column="2" Background="{Binding ElementName=BGColor, Path=Text}">
             <Viewbox Stretch="Uniform" Margin="2,2,2,2">
                 <Viewbox.BitmapEffect>
-                    <DropShadowBitmapEffect Color="Black" Direction="-25" ShadowDepth="10" />
+                    <DropShadowBitmapEffect Color="Black" 
+                                            Direction="{Binding ElementName=ShadDir, Path=Text}" 
+                                            ShadowDepth="{Binding ElementName=ShadDepth, Path=Text}" />
                 </Viewbox.BitmapEffect>
-                <StackPanel Orientation="Vertical">
-                    <StackPanel Style="{StaticResource CeneteredText}">
+                <StackPanel x:Name="RuneBox" Orientation="Vertical" Margin="2,0,2,0">
+                    <StackPanel Style="{StaticResource CenteredText}">
+                        <Control Style="{StaticResource Rune-h}" />
+                        <Control Style="{StaticResource Rune-e}" />
+                        <Control Style="{StaticResource Rune-l}" />
                         <Control Style="{StaticResource Rune-l}" />
                         <Control Style="{StaticResource Rune-o}" />
-                        <Control Style="{StaticResource Rune-st}" />
-                        <Control Style="{StaticResource Rune-space}" />
-                        <Control Style="{StaticResource Rune-w}" />
-                        <Control Style="{StaticResource Rune-e}" />
-                    </StackPanel>
-                    <StackPanel Style="{StaticResource CeneteredText}">
-                        <Control Style="{StaticResource Rune-a}" />
-                        <Control Style="{StaticResource Rune-r}" />
-                        <Control Style="{StaticResource Rune-e}" />
                     </StackPanel>
                 </StackPanel>
             </Viewbox>
