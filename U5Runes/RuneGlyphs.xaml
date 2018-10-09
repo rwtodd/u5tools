@@ -50,7 +50,7 @@
                         <Polyline Style="{DynamicResource RuneLines}"
                                       Points="0,10 1.5,0" />
                         <Polyline Style="{DynamicResource RuneLines}"
-                                      Points="1.0,4.8 5,10" />
+                                      Points="0.9,4.8 5,10" />
                     </Canvas>
                 </ControlTemplate>
             </Setter.Value>
@@ -320,7 +320,7 @@
                 <ControlTemplate TargetType="Control">
                     <Canvas Width="5" Height="10" Margin="{DynamicResource CharSpacing}">
                         <Polyline Style="{DynamicResource RuneLines}" Points="0,10 0.7,0 4.5,3.5 5,10" />
-                        <Polyline Style="{DynamicResource RuneLines}" Points="0,3 4.8,6" />
+                        <Polyline Style="{DynamicResource RuneLines}" Points="0.2,3 4.8,6" />
                         <Polyline Style="{DynamicResource RuneLines}" Points="2.5,4.5 2.5,10" />
                     </Canvas>
                 </ControlTemplate>
