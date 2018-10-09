@@ -8,6 +8,8 @@
         Title="Ultima V Runes" Height="450" Width="800">
     <Window.Resources>
         <SolidColorBrush x:Key="RuneColor" Color="{Binding ElementName=FGColor, Path=Text}" />
+        <Thickness x:Key="LineMargin" Bottom="1" Top="1" Left="0" Right="0" />
+        <Thickness x:Key="CharSpacing" Bottom="0" Top="0" Left="1" Right="1" />
         <Style x:Key="RuneLines" TargetType="Polyline">
             <Setter Property="Stroke" Value="{StaticResource RuneColor}" />
             <Setter Property="StrokeThickness" Value="1" />
@@ -15,16 +17,16 @@
             <Setter Property="StrokeStartLineCap" Value="Flat" />
             <Setter Property="StrokeLineJoin" Value="Bevel" />
         </Style>
-        <Style x:Key="CeneteredLine" TargetType="StackPanel">
+        <Style x:Key="CeneteredText" TargetType="StackPanel">
             <Setter Property="Orientation" Value="Horizontal" />
-            <Setter Property="Margin" Value="1" />
+            <Setter Property="Margin" Value="{StaticResource LineMargin}" />
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
         <Style x:Key="Rune-d" TargetType="Control">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Control">
-                        <Canvas Width="5" Height="10" Margin="1,0,1,0">
+                        <Canvas Width="5" Height="10" Margin="{StaticResource CharSpacing}">
                             <Polyline Style="{StaticResource RuneLines}"
                                       Points="0,0 5,10 5,0 0,10 0,0 5,10" />
                         </Canvas>
@@ -67,12 +69,12 @@
                     <DropShadowBitmapEffect Color="Black" Direction="-25" ShadowDepth="10" />
                 </Viewbox.BitmapEffect>
                 <StackPanel Orientation="Vertical">
-                    <StackPanel Style="{StaticResource CeneteredLine}">
+                    <StackPanel Style="{StaticResource CeneteredText}">
                         <Control Style="{StaticResource Rune-d}" />
                         <Control Style="{StaticResource Rune-i}" />
                         <Control Style="{StaticResource Rune-d}" />
                     </StackPanel>
-                    <StackPanel Style="{StaticResource CeneteredLine}">
+                    <StackPanel Style="{StaticResource CeneteredText}">
                         <Control Style="{StaticResource Rune-d}" />
                         <Control Style="{StaticResource Rune-d}" />
                     </StackPanel>
