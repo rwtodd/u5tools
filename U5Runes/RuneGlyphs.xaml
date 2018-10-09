@@ -343,7 +343,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Control">
-                    <Canvas Width="5" Height="10" Margin="{DynamicResource CharSpacing}">
+                    <Canvas Width="4.5" Height="10" Margin="{DynamicResource CharSpacing}">
                         <Polyline Style="{DynamicResource RuneLines}" Points="0,10 0,0" />
                         <Polyline Style="{DynamicResource RuneLines}" Points="0,2.5 4.5,5 0,7.5" />
                     </Canvas>
