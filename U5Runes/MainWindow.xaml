@@ -5,8 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:U5Runes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Ultima V Runes" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="rlines" TargetType="Polyline">
+            <Setter Property="Stroke" Value="{Binding ElementName=FGColor, Path=Text}" />
+            <Setter Property="StrokeThickness" Value="1" />
+        </Style>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <GridSplitter Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" />
+        <DockPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+            <Button DockPanel.Dock="Bottom">What??</Button>
+            <TextBox x:Name="FGColor" DockPanel.Dock="Bottom">Brown</TextBox>
+            <TextBox x:Name="BGColor" DockPanel.Dock="Bottom">Gray</TextBox>
+            <TextBox TextWrapping="Wrap" AcceptsReturn="True">Hello</TextBox>
+        </DockPanel>
+        <Border Grid.Row="0" Grid.Column="2" Background="{Binding ElementName=BGColor, Path=Text}">
+            <Viewbox Stretch="Uniform" Margin="2,2,2,2">
+                <Viewbox.BitmapEffect>
+                    <DropShadowBitmapEffect Color="Black" Direction="-25" ShadowDepth="10" />
+                </Viewbox.BitmapEffect>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Margin="1" HorizontalAlignment="Center">
+                        <Canvas Width="5" Height="10" Margin="1,0,1,0">
+                            <Polyline Style="{StaticResource rlines}" Points="0,0 5,10" />
+                            <Polyline Style="{StaticResource rlines}" Points="5,0 0,10" />
+                        </Canvas>
+                        <Canvas Width="5" Height="10" Margin="1,0,1,0">
+                            <Polyline Style="{StaticResource rlines}" Points="0,0 5,10" />
+                            <Polyline Style="{StaticResource rlines}" Points="5,0 0,10" />
+                        </Canvas>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="1" HorizontalAlignment="Center">
+                        <Polyline Style="{StaticResource rlines}" Points="0,0 10,10" />
+                        <Polyline Style="{StaticResource rlines}" Points="0,0 10,10" />
+                    </StackPanel>
+                </StackPanel>
+            </Viewbox>
+        </Border>
     </Grid>
 </Window>
