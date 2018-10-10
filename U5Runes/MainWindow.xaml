@@ -41,35 +41,36 @@
         </Grid.RowDefinitions>
         <GridSplitter Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" />
         <DockPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
-            <Grid DockPanel.Dock="Bottom">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="AUTO" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0">Color:</TextBlock>
-                <TextBox x:Name="FGColor" Grid.Row="0" Grid.Column="1">Brown</TextBox>
-                <TextBlock Grid.Row="1" Grid.Column="0">Background:</TextBlock>
-                <TextBox x:Name="BGColor" Grid.Row="1" Grid.Column="1">Gray</TextBox>
-                <TextBlock Grid.Row="2" Grid.Column="0">Shadow Dir:</TextBlock>
-                <TextBox x:Name="ShadDir" Grid.Row="2" Grid.Column="1">-25</TextBox>
-                <TextBlock Grid.Row="3" Grid.Column="0">Shadow Depth:</TextBlock>
-                <TextBox x:Name="ShadDepth" Grid.Row="3" Grid.Column="1">5</TextBox>
-                <TextBlock Grid.Row="4" Grid.Column="0">Char Spacing:</TextBlock>
-                <TextBox Grid.Row="4" Grid.Column="1"
+            <Expander DockPanel.Dock="Bottom" Header="Controls" IsExpanded="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="AUTO" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0">Color:</TextBlock>
+                    <TextBox x:Name="FGColor" Grid.Row="0" Grid.Column="1">gold</TextBox>
+                    <TextBlock Grid.Row="1" Grid.Column="0">Background:</TextBlock>
+                    <TextBox x:Name="BGColor" Grid.Row="1" Grid.Column="1">darkgreen</TextBox>
+                    <TextBlock Grid.Row="2" Grid.Column="0">Shadow Dir:</TextBlock>
+                    <TextBox x:Name="ShadDir" Grid.Row="2" Grid.Column="1">-25</TextBox>
+                    <TextBlock Grid.Row="3" Grid.Column="0">Shadow Depth:</TextBlock>
+                    <TextBox x:Name="ShadDepth" Grid.Row="3" Grid.Column="1">5</TextBox>
+                    <TextBlock Grid.Row="4" Grid.Column="0">Char Spacing:</TextBlock>
+                    <TextBox Grid.Row="4" Grid.Column="1"
                          TextChanged="CharSpace_TextChanged">1</TextBox>
-                <TextBlock Grid.Row="5" Grid.Column="0">Line Spacing:</TextBlock>
-                <TextBox Grid.Row="5" Grid.Column="1"
+                    <TextBlock Grid.Row="5" Grid.Column="0">Line Spacing:</TextBlock>
+                    <TextBox Grid.Row="5" Grid.Column="1"
                          TextChanged="LineSpace_TextChanged">1</TextBox>
-
-            </Grid>
+                </Grid>
+            </Expander>
             <TextBox x:Name="English" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="TextBox_TextChanged">Hello</TextBox>
         </DockPanel>
         <Border Grid.Row="0" Grid.Column="2" Background="{Binding ElementName=BGColor, Path=Text}">
