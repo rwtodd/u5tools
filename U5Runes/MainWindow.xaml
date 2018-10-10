@@ -23,7 +23,7 @@
                     </Style>
                     <Style x:Key="CenteredText" TargetType="StackPanel">
                         <Setter Property="Orientation" Value="Horizontal" />
-                        <Setter Property="Margin" Value="{StaticResource LineMargin}" />
+                        <Setter Property="Margin" Value="{DynamicResource LineMargin}" />
                         <Setter Property="HorizontalAlignment" Value="Center" />
                     </Style>
                 </ResourceDictionary>
@@ -52,6 +52,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0">Color:</TextBlock>
                 <TextBox x:Name="FGColor" Grid.Row="0" Grid.Column="1">Brown</TextBox>
@@ -61,9 +62,12 @@
                 <TextBox x:Name="ShadDir" Grid.Row="2" Grid.Column="1">-25</TextBox>
                 <TextBlock Grid.Row="3" Grid.Column="0">Shadow Depth:</TextBlock>
                 <TextBox x:Name="ShadDepth" Grid.Row="3" Grid.Column="1">5</TextBox>
-                <TextBlock Grid.Row="4" Grid.Column="0">Shadow Depth:</TextBlock>
+                <TextBlock Grid.Row="4" Grid.Column="0">Char Spacing:</TextBlock>
                 <TextBox Grid.Row="4" Grid.Column="1"
                          TextChanged="CharSpace_TextChanged">1</TextBox>
+                <TextBlock Grid.Row="5" Grid.Column="0">Line Spacing:</TextBlock>
+                <TextBox Grid.Row="5" Grid.Column="1"
+                         TextChanged="LineSpace_TextChanged">1</TextBox>
 
             </Grid>
             <TextBox x:Name="English" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="TextBox_TextChanged">Hello</TextBox>

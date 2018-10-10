@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace U5Runes
 {
@@ -20,12 +21,14 @@ namespace U5Runes
     /// </summary>
     public partial class MainWindow : Window
     {
+        private DispatcherTimer RedrawTimer = null;
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void RedrawRunes()
         {
             if (RuneBox == null) return;
 
@@ -66,6 +69,24 @@ namespace U5Runes
             }
         }
 
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs eargs)
+        {
+            if (RedrawTimer == null)
+            {
+                RedrawTimer = new DispatcherTimer
+                {
+                    Interval = new TimeSpan(0, 0, 1)
+                };
+                RedrawTimer.Tick += (s, e) =>
+                {
+                    RedrawRunes();
+                    RedrawTimer.Stop();
+                };
+            }
+            RedrawTimer.Stop();
+            RedrawTimer.Start();
+        }
+
         /// <summary>
         /// Updates the resource dictionary's spacing entry when the contents
         /// of the UI textbox change.  I couldn't do this with simple binding
@@ -77,10 +98,21 @@ namespace U5Runes
         {
             TextBox src = (TextBox)e.Source;
             if (Double.TryParse(src.Text, out double width))
-            {
-                Resources["CharSpacing"] = new Thickness(width, 0,width, 0);
-                TextBox_TextChanged(sender, e);
-            }
+                Resources["CharSpacing"] = new Thickness(width, 0, width, 0);
+        }
+
+        /// <summary>
+        /// Updates the resource dictionary's spacing entry when the contents
+        /// of the UI textbox change.  I couldn't do this with simple binding
+        /// because Thickness doesn't support bindings.
+        /// </summary>
+        /// <param name="sender">Event arg</param>
+        /// <param name="e">event arg--used for the Source property</param>
+        private void LineSpace_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox src = (TextBox)e.Source;
+            if (Double.TryParse(src.Text, out double width))
+                Resources["LineMargin"] = new Thickness(0, width, 0, width);
         }
     }
 }
