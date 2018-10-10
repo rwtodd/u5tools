@@ -35,33 +35,51 @@ namespace U5Runes
             RuneBox.Children.Clear();
 
             // STEP 2: Go line by line... looking up runes
-            foreach(var line in English.Text.Split(new[] {'\r','\n'}))
+            foreach (var line in English.Text.Split(new[] { '\r', '\n' }))
             {
                 var transformed = line.ToLower().Trim();
                 var len = transformed.Length;
 
-                var linePanel = new StackPanel { Style=lineStyle };
+                var linePanel = new StackPanel { Style = lineStyle };
                 var idx = 1;
-                while (idx <= len) 
+                while (idx <= len)
                 {
-                    var rune = $"Rune-{transformed.Substring(idx-1,(idx < len) ? 2 : 1)}";
+                    var rune = $"Rune-{transformed.Substring(idx - 1, (idx < len) ? 2 : 1)}";
                     Style letter = (Style)TryFindResource(rune);
-                    if(letter == null)
+                    if (letter == null)
                     {
-                        letter = (Style)TryFindResource(rune.Substring(0,6));
+                        letter = (Style)TryFindResource(rune.Substring(0, 6));
                         idx += 1;
-                    } else
+                    }
+                    else
                     {
                         idx += 2;
                     }
-                    if(letter != null)
+                    if (letter != null)
                     {
-                      linePanel.Children.Add(new Control { Style = letter });
+                        linePanel.Children.Add(new Control { Style = letter });
                     }
                 }
 
-                if(linePanel.Children.Count > 0)
+                if (linePanel.Children.Count > 0)
                     RuneBox.Children.Add(linePanel);
+            }
+        }
+
+        /// <summary>
+        /// Updates the resource dictionary's spacing entry when the contents
+        /// of the UI textbox change.  I couldn't do this with simple binding
+        /// because Thickness doesn't support bindings.
+        /// </summary>
+        /// <param name="sender">Event arg</param>
+        /// <param name="e">event arg--used for the Source property</param>
+        private void CharSpace_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox src = (TextBox)e.Source;
+            if (Double.TryParse(src.Text, out double width))
+            {
+                Resources["CharSpacing"] = new Thickness(width, 0,width, 0);
+                TextBox_TextChanged(sender, e);
             }
         }
     }
