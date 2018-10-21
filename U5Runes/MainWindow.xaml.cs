@@ -26,6 +26,14 @@ namespace U5Runes
         public MainWindow()
         {
             InitializeComponent();
+            SolidColorBrush rc = (SolidColorBrush)Resources["RuneColor"];
+            Binding b = new Binding
+            {
+                Source = FGColor,
+                Path = new PropertyPath("Text"),
+                Mode = BindingMode.OneWay
+            };
+            BindingOperations.SetBinding(rc,SolidColorBrush.ColorProperty,b);
         }
 
         private void RedrawRunes()

@@ -11,16 +11,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="RuneGlyphs.xaml" />
                 <ResourceDictionary>
-                    <SolidColorBrush x:Key="RuneColor" Color="{Binding ElementName=FGColor, Path=Text}" />
                     <Thickness x:Key="LineMargin" Bottom="1" Top="1" Left="0" Right="0" />
                     <Thickness x:Key="CharSpacing" Bottom="0" Top="0" Left="1" Right="1" />
-                    <Style x:Key="RuneLines" TargetType="Polyline">
-                        <Setter Property="Stroke" Value="{StaticResource RuneColor}" />
-                        <Setter Property="StrokeThickness" Value="1" />
-                        <Setter Property="StrokeEndLineCap" Value="Flat" />
-                        <Setter Property="StrokeStartLineCap" Value="Flat" />
-                        <Setter Property="StrokeLineJoin" Value="Bevel" />
-                    </Style>
                     <Style x:Key="CenteredText" TargetType="StackPanel">
                         <Setter Property="Orientation" Value="Horizontal" />
                         <Setter Property="Margin" Value="{DynamicResource LineMargin}" />
