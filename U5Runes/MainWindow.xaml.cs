@@ -33,7 +33,7 @@ namespace U5Runes
                 Path = new PropertyPath("Text"),
                 Mode = BindingMode.OneWay
             };
-            BindingOperations.SetBinding(rc,SolidColorBrush.ColorProperty,b);
+            BindingOperations.SetBinding(rc, SolidColorBrush.ColorProperty, b);
         }
 
         private void RedrawRunes()
@@ -121,6 +121,37 @@ namespace U5Runes
             TextBox src = (TextBox)e.Source;
             if (Double.TryParse(src.Text, out double width))
                 Resources["LineMargin"] = new Thickness(0, width, 0, width);
+        }
+
+
+        // Helper code from: https://blogs.msdn.microsoft.com/jaimer/2009/07/03/rendertargetbitmap-tips/
+        private static BitmapSource CaptureScreen(Visual target, double dpiX, double dpiY)
+        {
+            if (target == null)
+            {
+                return null;
+            }
+            Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
+            RenderTargetBitmap rtb = new RenderTargetBitmap((int)(bounds.Width * dpiX / 96.0),
+                                                            (int)(bounds.Height * dpiY / 96.0),
+                                                            dpiX,
+                                                            dpiY,
+                                                            PixelFormats.Pbgra32);
+            DrawingVisual dv = new DrawingVisual();
+            using (DrawingContext ctx = dv.RenderOpen())
+            {
+                VisualBrush vb = new VisualBrush(target);
+                ctx.DrawRectangle(vb, null, new Rect(new Point(), bounds.Size));
+            }
+            rtb.Render(dv);
+            return rtb;
+        }
+
+        private void SaveClipb_Click(object sender, RoutedEventArgs e)
+        {
+            var dpi = VisualTreeHelper.GetDpi(RunePic);
+            var bms = CaptureScreen(RunePic,dpi.PixelsPerInchX,dpi.PixelsPerInchY);
+            Clipboard.SetImage(bms);
         }
     }
 }
