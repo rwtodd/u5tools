@@ -11,9 +11,9 @@ the ultima runes from [Runes-C.ttf](https://www.dafont.com/ultima-runes.font), b
 with added ligatures so you can type `th`, `ng`, `ee`, `ea`, and `st` directly and
 get the special characters.  This makes typing in the font a LOT more convenient.
 
-## U5Runes
+## WPF U5Runes App
 
-A WPF app which draws whatever you type in the runes
+In the wpf-version directory, there's a WPF app which draws whatever you type in the runes
 used by the series. You have control over the colors,
 spacing, and shadows:
 
