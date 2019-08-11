@@ -1,2 +1,3 @@
-/mlib/
-/mods/
+/build/
+/dist/
+/nbproject/private/

@@ -1,79 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ====================================================================== 
-     Aug 10, 2019 8:10:54 PM                                                        
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="u5tools" default="default" basedir="." xmlns:j2semodularproject="http://www.netbeans.org/ns/j2se-modular-project/1">
+    <description>Builds, tests, and runs the project u5tools.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <!--
 
-     Ultima V Tools    
-     A set of java modules to have fun with Ultima V
-                   
-     richa                                                                
-     ====================================================================== -->
-<project name="Ultima V Tools" default="info">
-    <description>
-            A set of java modules to have fun with Ultima V
-    </description>
-	
-	<property name = "src.dir" value = "src"/>
-	<property name = "dest.dir" value = "mods" />
-	<property name = "lib.dir" value = "mlib" />
-		
-	<presetdef name="javac">
-	       <javac includeantruntime="false" />
-	</presetdef>
+    There exist several targets which are by default empty and which can be 
+    used for execution of your tasks. These targets are usually executed 
+    before and after some main targets. They are: 
 
-    <!-- ================================= 
-          target: info              
-         ================================= -->
-    <target name="info" depends="" description="A set of java modules to have fun with Ultima V">
-        <echo>Fun with Ultima V tools.</echo>
-    </target>
+      -pre-init:                 called before initialization of project properties
+      -post-init:                called after initialization of project properties
+      -pre-compile:              called before javac compilation
+      -post-compile:             called after javac compilation
+      -pre-compile-single:       called before javac compilation of single file
+      -post-compile-single:      called after javac compilation of single file
+      -pre-compile-test:         called before javac compilation of JUnit tests
+      -post-compile-test:        called after javac compilation of JUnit tests
+      -pre-compile-test-single:  called before javac compilation of single JUnit test
+      -post-compile-test-single: called after javac compilation of single JUunit test
+      -pre-jar:                  called before JAR building
+      -post-jar:                 called after JAR building
+      -post-clean:               called after cleaning build products
 
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: build         
-         - - - - - - - - - - - - - - - - - -->
-    <target name="build" depends="" description="compile the classes">
-        <mkdir dir="${dest.dir}"/>
-    	<javac modulesourcepath="${src.dir}" release="12" destdir="${dest.dir}" />
-    </target>
-	
-	<!-- ================================= 
-          target: jar              
-         ================================= -->
-    <target name="jar" depends="build" description="build the jar file">
-        <mkdir dir="${lib.dir}"/>
-    	<jar destfile="${lib.dir}/org.rwtodd.u5tools.core.jar" level="9">
-    		<fileset dir="${dest.dir}/org.rwtodd.u5tools.core" />
-    	</jar>
-    	<jar destfile="${lib.dir}/org.rwtodd.u5tools.runes.jar" level="9">
-    		<fileset dir="${dest.dir}/org.rwtodd.u5tools.runes" />
-    	</jar>
-    	<!-- update the main jar to make it executable... ant doesn't support this yet -->
-    	<exec executable="jar">
-    	    <arg value="--update"/>
-    		<arg value="-e"/>
-    		<arg value="org.rwtodd.u5tools.Cmd" />
-    		<arg value="--file"/>
-    		<arg value="${lib.dir}/org.rwtodd.u5tools.core.jar"/>
-    	</exec>
-     </target>
+    (Targets beginning with '-' are not intended to be called on their own.)
 
-	<!-- ================================= 
-         target: run
-         ================================= -->
-    <target name="run" depends="build" description="run the program">
-       <java module="org.rwtodd.u5tools.core" classname="org.rwtodd.u5tools.Cmd" fork="true">
-	        <sysproperty key="swing.metalTheme" value="steel" />
-            <modulepath>
-               <pathelement location="${dest.dir}" />
-            </modulepath>
-       </java>
-    </target> 
+    Example of inserting an obfuscator after compilation could look like this:
 
-	<!-- ================================= 
-         target: clean
-         ================================= -->
-    <target name="clean" description="remove all build artifacts">
-       <delete quiet="true" dir="${lib.dir}" />
-       <delete quiet="true" dir="${dest.dir}" />
-    </target>	
+        <target name="-post-compile">
+            <obfuscate>
+                <fileset dir="${build.classes.dir}"/>
+            </obfuscate>
+        </target>
+
+    For list of available properties check the imported 
+    nbproject/build-impl.xml file. 
+
+
+    Another way to customize the build is by overriding existing main targets.
+    The targets of interest are: 
+
+      -init-macrodef-javac:     defines macro for javac compilation
+      -init-macrodef-junit:     defines macro for junit execution
+      -init-macrodef-debug:     defines macro for class debugging
+      -init-macrodef-java:      defines macro for class execution
+      -do-jar:                  JAR building
+      run:                      execution of project 
+      -javadoc-build:           Javadoc generation
+      test-report:              JUnit report generation
+
+    Notice that the overridden target depends on the jar target and not only on 
+    the compile target as the regular run target does. Again, for a list of available 
+    properties which you can use, check the target you are overriding in the
+    nbproject/build-impl.xml file. 
+
+    -->
 </project>
-

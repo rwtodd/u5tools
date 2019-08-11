@@ -54,6 +54,8 @@ public class Cmd extends JFrame {
 	/** Change the display to one of the tools. */
 	private void switchPanels(Tool tgt) {
 		setContentPane(tgt.createUI(this::displayToolList));
+                pack();
+                repaint();
 	}
 	
 	/**
