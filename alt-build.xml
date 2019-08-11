@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Aug 10, 2019 8:10:54 PM                                                        
+
+     Ultima V Tools    
+     A set of java modules to have fun with Ultima V
+                   
+     richa                                                                
+     ====================================================================== -->
+<project name="Ultima V Tools" default="info">
+    <description>
+            A set of java modules to have fun with Ultima V
+    </description>
+	
+	<property name = "src.dir" value = "src"/>
+	<property name = "dest.dir" value = "build/modules" />
+	<property name = "lib.dir" value = "dist" />
+		
+	<presetdef name="javac">
+	       <javac includeantruntime="false" />
+	</presetdef>
+
+    <!-- ================================= 
+          target: info              
+         ================================= -->
+    <target name="info" depends="" description="A set of java modules to have fun with Ultima V">
+        <echo>Fun with Ultima V tools.</echo>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: build         
+         - - - - - - - - - - - - - - - - - -->
+    <target name="build" depends="" description="compile the classes">
+        <mkdir dir="${dest.dir}"/>
+    	<javac modulesourcepath="${src.dir}/*/classes" release="12" destdir="${dest.dir}" />
+    </target>
+	
+	<!-- ================================= 
+          target: jar              
+         ================================= -->
+    <target name="jar" depends="build" description="build the jar file">
+        <mkdir dir="${lib.dir}"/>
+    	<jar destfile="${lib.dir}/org.rwtodd.u5tools.core.jar" level="9">
+    		<fileset dir="${dest.dir}/org.rwtodd.u5tools.core" />
+    	</jar>
+    	<jar destfile="${lib.dir}/org.rwtodd.u5tools.runes.jar" level="9">
+    		<fileset dir="${dest.dir}/org.rwtodd.u5tools.runes" />
+    	</jar>
+    	<jar destfile="${lib.dir}/org.rwtodd.u5tools.saves.jar" level="9">
+    		<fileset dir="${dest.dir}/org.rwtodd.u5tools.saves" />
+    	</jar>
+    	<!-- update the main jar to make it executable... ant doesn't support this yet -->
+    	<exec executable="jar">
+    	    <arg value="--update"/>
+    		<arg value="-e"/>
+    		<arg value="org.rwtodd.u5tools.Cmd" />
+    		<arg value="--file"/>
+    		<arg value="${lib.dir}/org.rwtodd.u5tools.core.jar"/>
+    	</exec>
+     </target>
+
+	<!-- ================================= 
+         target: run
+         ================================= -->
+    <target name="run" depends="build" description="run the program">
+       <java module="org.rwtodd.u5tools.core" classname="org.rwtodd.u5tools.Cmd" fork="true">
+	        <sysproperty key="swing.metalTheme" value="steel" />
+            <modulepath>
+               <pathelement location="${dest.dir}" />
+            </modulepath>
+       </java>
+    </target> 
+
+	<!-- ================================= 
+         target: clean
+         ================================= -->
+    <target name="clean" description="remove all build artifacts">
+       <delete quiet="true" dir="${lib.dir}" />
+       <delete quiet="true" dir="${dest.dir}" />
+    </target>	
+</project>
+
