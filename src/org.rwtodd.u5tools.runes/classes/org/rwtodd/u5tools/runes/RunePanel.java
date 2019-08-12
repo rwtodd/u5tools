@@ -27,7 +27,8 @@ import java.awt.Shape;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.awt.image.ConvolveOp;
 import java.util.Arrays;
 import javax.swing.JPanel;
 
@@ -39,6 +40,9 @@ import javax.swing.JPanel;
 class RunePanel extends JPanel {
 
     private Shape letters;
+    private BufferedImage runeImage;
+    private BufferedImage shadowImage;
+
     private float spacingX;
     private float spacingY;
     private final Alphabet alphabet;
@@ -47,6 +51,7 @@ class RunePanel extends JPanel {
     private double shadowOffsetY;
     private int paddingX;
     private int paddingY;
+    private ConvolveOp blurOp;
 
     RunePanel() {
         super();
@@ -61,6 +66,22 @@ class RunePanel extends JPanel {
         shadowOffsetY = 0.5;
         paddingX = (int) alphabet.getLetterWidth();
         paddingY = (int) alphabet.getLetterHeight();
+        runeImage = null;
+        shadowImage = null;
+
+        setupBlur(6);
+    }
+
+    private void setupBlur(int size) {
+        // now blur...
+        int total = size * size;
+        float[] matrix = new float[total];
+        for (int i = 0; i < total; i++) {
+            matrix[i] = 1.0f / total;
+        }
+        blurOp = new ConvolveOp(new java.awt.image.Kernel(size, size, matrix),
+                ConvolveOp.EDGE_ZERO_FILL,
+                null);
     }
 
     /**
@@ -169,9 +190,20 @@ class RunePanel extends JPanel {
                 panelX / (shapeX + paddingX),
                 panelY / (shapeY + paddingY)); // maintain aspect ratio
 
-        var img = getGraphicsConfiguration()
-                .createCompatibleImage(panelX, panelY, Transparency.TRANSLUCENT);
-        var g2 = (Graphics2D) img.getGraphics();
+        if ((runeImage == null) || (runeImage.getWidth() != panelX)
+                || (runeImage.getHeight() != panelY)) {
+            runeImage = getGraphicsConfiguration()
+                    .createCompatibleImage(panelX, panelY, Transparency.TRANSLUCENT);
+            shadowImage = null;
+        }
+
+        var g2 = (Graphics2D) runeImage.getGraphics();
+        // clear the rune image
+        g2.setComposite(AlphaComposite.Clear);
+        g2.fillRect(0, 0, panelX, panelY);
+        g2.setComposite(AlphaComposite.SrcOver);
+        
+        // draw the letters centered
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2.translate(
@@ -183,27 +215,22 @@ class RunePanel extends JPanel {
         g2.draw(letters);
         g2.dispose();
 
-        // now blur...
-        float[] matrix = new float[36];
-        for (int i = 0; i < 36; i++) {
-            matrix[i] = 1.0f / 36.0f;
-        }
-        var blur = new java.awt.image.ConvolveOp(new java.awt.image.Kernel(6, 6, matrix), java.awt.image.ConvolveOp.EDGE_ZERO_FILL, null);
-        var blurred = blur.filter(img, null);
-        g2 = (Graphics2D) blurred.getGraphics();
+        // create the drop shadow
+        shadowImage = blurOp.filter(runeImage, shadowImage);
+        g2 = (Graphics2D) shadowImage.getGraphics();
         g2.setColor(shadowColor);
         g2.setComposite(AlphaComposite.SrcIn);
         g2.fillRect(0, 0, panelX, panelY);
         g2.dispose();
 
-        // now paint the background, shadow, and image
+        // now paint the background, shadow, and image, in z-order
         g.setColor(getBackground());
         g.fillRect(0, 0, panelX, panelY);
-        g.drawImage(blurred,
+        g.drawImage(shadowImage,
                 (int) (shadowOffsetX * scaleFactor),
                 (int) (shadowOffsetY * scaleFactor),
                 null);
-        g.drawImage(img, 0, 0, null);
+        g.drawImage(runeImage, 0, 0, null);
     }
 
 }
