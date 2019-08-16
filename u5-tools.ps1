@@ -1,0 +1,1 @@
+javaw -p "org.rwtodd.u5tools.core\target\org-rwtodd-u5tools-core-1.0.jar;org.rwtodd.u5tools.runes\target\org-rwtodd-u5tools-runes-1.0.jar;org.rwtodd.u5tools.saves\target\org-rwtodd-u5tools-saves-1.0.jar" -m org.rwtodd.u5tools.core
