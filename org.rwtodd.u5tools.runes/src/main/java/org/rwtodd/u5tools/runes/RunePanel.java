@@ -20,6 +20,7 @@ package org.rwtodd.u5tools.runes;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -42,34 +43,77 @@ class RunePanel extends JPanel {
     private Shape letters;
     private BufferedImage runeImage;
     private BufferedImage shadowImage;
-
-    private float spacingX;
-    private float spacingY;
     private final Alphabet alphabet;
-    private Color shadowColor;
-    private double shadowOffsetX;
-    private double shadowOffsetY;
-    private int paddingX;
-    private int paddingY;
     private ConvolveOp blurOp;
+
+    static class Configuration implements Cloneable {
+
+        float spacingX;
+        float spacingY;
+        Color fgColor;
+        Color bgColor;
+        Color shadowColor;
+        int shadowDepth;
+        double shadowOffsetX;
+        double shadowOffsetY;
+        int paddingX;
+        int paddingY;
+
+        @Override
+        protected Configuration clone() {
+            try {
+                return (Configuration) super.clone();
+            } catch (CloneNotSupportedException cns) {
+                return null;
+            }
+        }
+
+    }
+
+    private Configuration cfg;
+
+    /**
+     * get a copy of the panel's configuration.
+     * @return a copy of the panel's configuration.
+     */
+    public Configuration getCfg() {
+        return cfg.clone();
+    }
+
+    /**
+     * Update the configuration of the RunePanel.
+     *
+     * @param cfg the new configuration.
+     */
+    public final void setCfg(Configuration cfg) {
+        if ((this.cfg == null) || (this.cfg.shadowDepth != cfg.shadowDepth)) {
+            setupBlur(cfg.shadowDepth);
+        }
+        setForeground(cfg.fgColor);
+        setBackground(cfg.bgColor);
+        this.cfg = cfg.clone();
+    }
 
     RunePanel() {
         super();
+        super.setPreferredSize(new Dimension(400,400));
+        
         letters = new Path2D.Float();
-        spacingX = 2f;
-        spacingY = 2f;
         alphabet = new Alphabet();
-        setForeground(Color.ORANGE);
-        setBackground(Color.GREEN);
-        shadowColor = Color.BLACK;
-        shadowOffsetX = 0.5;
-        shadowOffsetY = 0.5;
-        paddingX = (int) alphabet.getLetterWidth();
-        paddingY = (int) alphabet.getLetterHeight();
         runeImage = null;
         shadowImage = null;
-
-        setupBlur(6);
+        var firstCfg = new Configuration();
+        firstCfg.spacingX = 2f;
+        firstCfg.spacingY = 2f;
+        firstCfg.fgColor = Color.ORANGE;
+        firstCfg.bgColor = Color.GREEN;
+        firstCfg.shadowColor = Color.BLACK;
+        firstCfg.shadowDepth = 6;
+        firstCfg.shadowOffsetX = 0.5;
+        firstCfg.shadowOffsetY = 0.5;
+        firstCfg.paddingX = (int) alphabet.getLetterWidth();
+        firstCfg.paddingY = (int) alphabet.getLetterHeight();
+        setCfg(firstCfg);
     }
 
     private void setupBlur(int size) {
@@ -130,14 +174,14 @@ class RunePanel extends JPanel {
                         space.getPathIterator(
                                 AffineTransform.getTranslateInstance(xlevel, 0.0)),
                         false);
-                xlevel += space.getRuneWidth() + spacingX;
+                xlevel += space.getRuneWidth() + cfg.spacingX;
             }
 
             result.append(
                     glyph.getPathIterator(
                             AffineTransform.getTranslateInstance(xlevel, 0.0)),
                     false);
-            xlevel += glyph.getRuneWidth() + spacingX;
+            xlevel += glyph.getRuneWidth() + cfg.spacingX;
         }
 
         return result;
@@ -164,7 +208,7 @@ class RunePanel extends JPanel {
                             (maxWidth - s.getBounds2D().getMaxX()) / 2.0,
                             ylevel)),
                     false);
-            ylevel += alphabet.getLetterHeight() + spacingY;
+            ylevel += alphabet.getLetterHeight() + cfg.spacingY;
         }
         return answer;
     }
@@ -187,8 +231,8 @@ class RunePanel extends JPanel {
         final var shapeX = shapeSize.getMaxX();
         final var shapeY = shapeSize.getMaxY();
         final var scaleFactor = Math.min(
-                panelX / (shapeX + paddingX),
-                panelY / (shapeY + paddingY)); // maintain aspect ratio
+                panelX / (shapeX + cfg.paddingX),
+                panelY / (shapeY + cfg.paddingY)); // maintain aspect ratio
 
         if ((runeImage == null) || (runeImage.getWidth() != panelX)
                 || (runeImage.getHeight() != panelY)) {
@@ -202,7 +246,7 @@ class RunePanel extends JPanel {
         g2.setComposite(AlphaComposite.Clear);
         g2.fillRect(0, 0, panelX, panelY);
         g2.setComposite(AlphaComposite.SrcOver);
-        
+
         // draw the letters centered
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -218,7 +262,7 @@ class RunePanel extends JPanel {
         // create the drop shadow
         shadowImage = blurOp.filter(runeImage, shadowImage);
         g2 = (Graphics2D) shadowImage.getGraphics();
-        g2.setColor(shadowColor);
+        g2.setColor(cfg.shadowColor);
         g2.setComposite(AlphaComposite.SrcIn);
         g2.fillRect(0, 0, panelX, panelY);
         g2.dispose();
@@ -227,8 +271,8 @@ class RunePanel extends JPanel {
         g.setColor(getBackground());
         g.fillRect(0, 0, panelX, panelY);
         g.drawImage(shadowImage,
-                (int) (shadowOffsetX * scaleFactor),
-                (int) (shadowOffsetY * scaleFactor),
+                (int) (cfg.shadowOffsetX * scaleFactor),
+                (int) (cfg.shadowOffsetY * scaleFactor),
                 null);
         g.drawImage(runeImage, 0, 0, null);
     }
