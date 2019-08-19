@@ -7,9 +7,11 @@ package org.rwtodd.u5tools.runes;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.text.NumberFormat;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,20 +28,20 @@ public class ConfigDialog extends JDialog {
     private final ColorButton fgButton;
     private final ColorButton bgButton;
     private final ColorButton shButton;
-    private final JTextField shadowField;
-    private final JTextField spacingXField;
-    private final JTextField spacingYField;
-    private final JTextField shadowXField;
-    private final JTextField shadowYField;
-    private final JTextField paddingXField;
-    private final JTextField paddingYField;
+    private final JFormattedTextField shadowField;
+    private final JFormattedTextField spacingXField;
+    private final JFormattedTextField spacingYField;
+    private final JFormattedTextField shadowXField;
+    private final JFormattedTextField shadowYField;
+    private final JFormattedTextField paddingXField;
+    private final JFormattedTextField paddingYField;
     private final JTextComponent text;
 
     ConfigDialog(final RunePanel rp, final JTextComponent txt) {
         super((JFrame) null, "Runes Config", false);
         cfg = rp.getCfg();
         text = txt;
-        
+
         // set up a panel of buttons...
         final var buttons = new JPanel();
         final var okBtn = new JButton("Ok");
@@ -73,30 +75,40 @@ public class ConfigDialog extends JDialog {
         shButton = new ColorButton(cfg.shadowColor);
         optPanel.add(shButton);
 
+        final var intFmt = NumberFormat.getIntegerInstance();
         optPanel.add(new JLabel("Shadow Blur:"));
-        shadowField = new JTextField(Integer.toString(cfg.shadowDepth));
+        shadowField = new JFormattedTextField(intFmt);
+        shadowField.setValue(cfg.shadowDepth);
         optPanel.add(shadowField);
 
+        final var decimalFmt = NumberFormat.getNumberInstance();
+        decimalFmt.setMaximumFractionDigits(4);
         optPanel.add(new JLabel("Shadow X:"));
-        shadowXField = new JTextField(Double.toString(cfg.shadowOffsetX));
+        shadowXField = new JFormattedTextField(decimalFmt);
+        shadowXField.setValue(cfg.shadowOffsetX);
         optPanel.add(shadowXField);
-        
+
         optPanel.add(new JLabel("Shadow Y:"));
-        shadowYField = new JTextField(Double.toString(cfg.shadowOffsetY));
+        shadowYField = new JFormattedTextField(decimalFmt);
+        shadowYField.setValue(cfg.shadowOffsetY);
         optPanel.add(shadowYField);
 
         optPanel.add(new JLabel("Spacing X:"));
-        spacingXField = new JTextField(Float.toString(cfg.spacingX));
+        spacingXField = new JFormattedTextField(decimalFmt);
+        spacingXField.setValue(cfg.spacingX);
         optPanel.add(spacingXField);
         optPanel.add(new JLabel("Spacing Y:"));
-        spacingYField = new JTextField(Float.toString(cfg.spacingY));
+        spacingYField = new JFormattedTextField(decimalFmt);
+        spacingYField.setValue(cfg.spacingY);
         optPanel.add(spacingYField);
 
         optPanel.add(new JLabel("Padding X:"));
-        paddingXField = new JTextField(Integer.toString(cfg.paddingX));
+        paddingXField = new JFormattedTextField(intFmt);
+        paddingXField.setValue(cfg.paddingX);
         optPanel.add(paddingXField);
         optPanel.add(new JLabel("Padding Y:"));
-        paddingYField = new JTextField(Integer.toString(cfg.paddingY));
+        paddingYField = new JFormattedTextField(intFmt);
+        paddingYField.setValue(cfg.paddingY);
         optPanel.add(paddingYField);
 
         super.add(optPanel, BorderLayout.CENTER);
@@ -107,18 +119,20 @@ public class ConfigDialog extends JDialog {
             cfg.fgColor = fgButton.getSelectedColor();
             cfg.bgColor = bgButton.getSelectedColor();
             cfg.shadowColor = shButton.getSelectedColor();
-            cfg.shadowDepth = Integer.parseInt(shadowField.getText());
-            cfg.paddingX = Integer.parseInt(paddingXField.getText());
-            cfg.paddingY = Integer.parseInt(paddingYField.getText());
-            cfg.shadowOffsetX = Double.parseDouble(shadowXField.getText());
-            cfg.shadowOffsetY = Double.parseDouble(shadowYField.getText());
-            var newSpX = Float.parseFloat(spacingXField.getText());
-            var newSpY = Float.parseFloat(spacingYField.getText());
+            cfg.shadowDepth = ((Number)shadowField.getValue()).intValue(); // Integer.parseInt(shadowField.getText());
+            cfg.paddingX = ((Number)paddingXField.getValue()).intValue();  //Integer.parseInt(paddingXField.getText());
+            cfg.paddingY = ((Number)paddingYField.getValue()).intValue(); // Integer.parseInt(paddingYField.getText());
+            cfg.shadowOffsetX = ((Number)shadowXField.getValue()).doubleValue(); //Double.parseDouble(shadowXField.getText());
+            cfg.shadowOffsetY = ((Number)shadowYField.getValue()).doubleValue(); //Double.parseDouble(shadowYField.getText());
+            var newSpX = ((Number)spacingXField.getValue()).floatValue();// Float.parseFloat(spacingXField.getText());
+            var newSpY = ((Number)spacingYField.getValue()).floatValue(); //Float.parseFloat(spacingYField.getText());
             var reRender = (cfg.spacingX != newSpX) || (cfg.spacingY != newSpY);
             cfg.spacingX = newSpX;
             cfg.spacingY = newSpY;
             rp.setCfg(cfg);
-            if(reRender) rp.drawText(text.getText());
+            if (reRender) {
+                rp.drawText(text.getText());
+            }
             rp.repaint();
         } catch (Exception e) {
             /* do nothing with user error for now */
