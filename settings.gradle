@@ -1,0 +1,3 @@
+rootProject.name = 'org.rwtodd.u5tools'
+include 'core', 'runes', 'saves'
+

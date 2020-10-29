@@ -1,0 +1,19 @@
+plugins {
+   id 'java'
+   id 'application'
+}
+
+dependencies {
+    // Use JUnit Jupiter API for testing.
+    // testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+    // implementation 'org.rwtodd.args:org.rwtodd.args:1.0'
+    runtimeOnly project(':runes')
+    runtimeOnly project(':saves')
+}
+
+application {
+    // Define the main class for the application.
+    mainModule = 'org.rwtodd.u5tools.core'
+    mainClassName = 'org.rwtodd.u5tools.Cmd'
+    applicationDefaultJvmArgs = ['-Dswing.metalTheme=steel']
+}

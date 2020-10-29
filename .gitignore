@@ -1,3 +1,5 @@
-/org.rwtodd.u5tools.core/target/
-/org.rwtodd.u5tools.runes/target/
-/org.rwtodd.u5tools.saves/target/
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
