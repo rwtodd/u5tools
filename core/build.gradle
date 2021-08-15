@@ -14,6 +14,6 @@ dependencies {
 application {
     // Define the main class for the application.
     mainModule = 'org.rwtodd.u5tools.core'
-    mainClassName = 'org.rwtodd.u5tools.Cmd'
+    mainClass.set('org.rwtodd.u5tools.Cmd')
     applicationDefaultJvmArgs = ['-Dswing.metalTheme=steel']
 }

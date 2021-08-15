@@ -3,7 +3,7 @@ subprojects {
     group = 'org.rwtodd.u5tools'
 
     repositories {
-        jcenter {
+        mavenCentral {
             content {
                 // this repository contains everything BUT artifacts with group starting with "my.company"
                 excludeGroupByRegex "org\\.rwtodd\\..*"
@@ -22,7 +22,7 @@ subprojects {
             modularity.inferModulePath = true
 	}
 	compileJava {
-            options.release = 15
+            options.release = 16
         }
     }
     
