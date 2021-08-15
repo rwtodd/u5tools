@@ -46,24 +46,27 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0">Color:</TextBlock>
                     <TextBox x:Name="FGColor" Grid.Row="0" Grid.Column="1">gold</TextBox>
                     <TextBlock Grid.Row="1" Grid.Column="0">Background:</TextBlock>
                     <TextBox x:Name="BGColor" Grid.Row="1" Grid.Column="1">darkgreen</TextBox>
-                    <TextBlock Grid.Row="2" Grid.Column="0">Shadow Dir:</TextBlock>
-                    <TextBox x:Name="ShadDir" Grid.Row="2" Grid.Column="1">-25</TextBox>
-                    <TextBlock Grid.Row="3" Grid.Column="0">Shadow Radius:</TextBlock>
-                    <TextBox x:Name="ShadRad" Grid.Row="3" Grid.Column="1">5</TextBox>
-                    <TextBlock Grid.Row="4" Grid.Column="0">Shadow Depth:</TextBlock>
-                    <TextBox x:Name="ShadDepth" Grid.Row="4" Grid.Column="1">5</TextBox>
-                    <TextBlock Grid.Row="5" Grid.Column="0">Char Spacing:</TextBlock>
-                    <TextBox Grid.Row="5" Grid.Column="1"
-                         TextChanged="CharSpace_TextChanged">1</TextBox>
-                    <TextBlock Grid.Row="6" Grid.Column="0">Line Spacing:</TextBlock>
+					<TextBlock Grid.Row="2" Grid.Column="0">Shadow Color:</TextBlock>
+					<TextBox x:Name="ShadColor" Grid.Row="2" Grid.Column="1">black</TextBox>
+					<TextBlock Grid.Row="3" Grid.Column="0">Shadow Dir:</TextBlock>
+					<TextBox x:Name="ShadDir" Grid.Row="3" Grid.Column="1">-25</TextBox>
+					<TextBlock Grid.Row="4" Grid.Column="0">Shadow Radius:</TextBlock>
+                    <TextBox x:Name="ShadRad" Grid.Row="4" Grid.Column="1">5</TextBox>
+                    <TextBlock Grid.Row="5" Grid.Column="0">Shadow Depth:</TextBlock>
+                    <TextBox x:Name="ShadDepth" Grid.Row="5" Grid.Column="1">5</TextBox>
+                    <TextBlock Grid.Row="6" Grid.Column="0">Char Spacing:</TextBlock>
                     <TextBox Grid.Row="6" Grid.Column="1"
+                         TextChanged="CharSpace_TextChanged">1</TextBox>
+                    <TextBlock Grid.Row="7" Grid.Column="0">Line Spacing:</TextBlock>
+                    <TextBox Grid.Row="7" Grid.Column="1"
                          TextChanged="LineSpace_TextChanged">1</TextBox>
                 </Grid>
             </Expander>
@@ -72,7 +75,7 @@
         <Border x:Name="RunePic" Grid.Row="0" Grid.Column="2" Background="{Binding ElementName=BGColor, Path=Text}">
             <Viewbox Stretch="Uniform" Margin="2,2,2,2">
                 <Viewbox.Effect>
-                    <DropShadowEffect Color="Black" 
+                    <DropShadowEffect Color="{Binding ElementName=ShadColor, Path=Text}" 
                                       BlurRadius="{Binding ElementName=ShadRad, Path=Text}"
                                       Direction="{Binding ElementName=ShadDir, Path=Text}" 
                                       ShadowDepth="{Binding ElementName=ShadDepth, Path=Text}" />
