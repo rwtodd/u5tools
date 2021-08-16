@@ -1,0 +1,668 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-U5SavedGame</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>U5SavedGame</command:noun>
+      <maml:description>
+        <maml:para>Read an Ultima V saved game file from disk, and return a data structure of its contents.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>An Ultima V saved game file is read from disk into an object, which is returned.  The object contains the main stats for all the saved characters, and the party's inventory.  These can all be changed interactively in powershell, and then written back to disk with the `Update-U5SavedGame` cmdlet.</maml:para>
+      <maml:para>Stats returned by the game include: Armor, Weapons, Spells, Potions, all the quest items (Sandalwood Box, the Shards, etc.), all the basic supplies (Food, Gems, Gold, etc.), Karma, and stats for each character.</maml:para>
+      <maml:para>The cmdlet understands the DOS SAVED.GAM/INIT.GAM format.  It is unlikely to work with other ports of the game.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-U5SavedGame</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+          <maml:name>LiteralPath</maml:name>
+          <maml:Description>
+            <maml:para>The path to the saved game file to load.  It defaults to the actual file used by the game, "SAVED.GAM."</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>"SAVED.GAM"</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+        <maml:name>LiteralPath</maml:name>
+        <maml:Description>
+          <maml:para>The path to the saved game file to load.  It defaults to the actual file used by the game, "SAVED.GAM."</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>"SAVED.GAM"</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\U5&gt; $gm = Get-U5SavedGame
+PS C:\U5&gt; $gm.Characters | Select-Object Name,Status,CurHP
+
+Name     Status   CurHP
+----     ------   -----
+Richard  Good        60
+Shamino  Poisoned     5
+Iolo     Good        90
+Mariah   Good         2
+Geoffrey Good        90
+Jaana    Good        60
+Julia    Good        60
+Dupre    Good        90
+Katrina  Good       150
+Sentri   Good        60
+Gwenno   Good        90
+Johne    Good        90
+Gorn     Good        60
+Maxwell  Good        30
+Toshi    Good        30
+Saduj    Good       120</dev:code>
+        <dev:remarks>
+          <maml:para>The default file (.\SAVED.GAM) is read in, and the characters' Name, Status, and HP are displayed.  These can all be changed on the command line, and then later saved to disk via the `Update-U5SavedGame` cmdlet.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\U5&gt; $gm = Get-U5SavedGame
+PS C:\U5&gt; $gm.Characters[0].Name = "LINDA"
+PS C:\U5&gt; $gm.SkullKeys = 21
+PS C:\U5&gt; $gm | Update-U5SavedGame -OutPath changed.gam</dev:code>
+        <dev:remarks>
+          <maml:para>The default file (.\SAVED.GAM) is read in, and the first character's name is changed, and the party is given 21 skull keys.  Then, the modified game is written to disk as `changed.gam`.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Set-U5CommonSettings</command:name>
+      <command:verb>Set</command:verb>
+      <command:noun>U5CommonSettings</command:noun>
+      <maml:description>
+        <maml:para>Set commonly-used settings in Ultima V saved games.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet is a convenience to set commonly-used values in an Ultima V saved game file.  It can take an object created by `Get-U5SavedGame`, or if `-OnDisk` is set, it can read and write a saved game file itself.  Switches (such as `-BasicSupplies`) control which values are set.  This is usually more convenient than manipulating all the values in a saved game object manually.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Set-U5CommonSettings</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>BasicSupplies</maml:name>
+          <maml:Description>
+            <maml:para>Ensures that the party has at least 400 Food, at least 1000 Gold, at least 75 Karma, and at least 40 Gems, Keys, SkullKeys, and Torches.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Food</maml:name>
+          <maml:Description>
+            <maml:para>Gives the party the given amount of food (0-9999).  Overrides `-BasicSupplies` if that is also in effect.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Gold</maml:name>
+          <maml:Description>
+            <maml:para>Gives the party the given amount of gold (0-9999).  Overrides `-BasicSupplies` if that is also in effect.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Healthy</maml:name>
+          <maml:Description>
+            <maml:para>Ensures that all party members are in (G)ood condition and that their HP is equal to their maximum HP.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>InputObject</maml:name>
+          <maml:Description>
+            <maml:para>This is the saved game object to modify, usually loaded via `Get-U5SavedGame`.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
+          <dev:type>
+            <maml:name>PSObject</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Potions</maml:name>
+          <maml:Description>
+            <maml:para>Ensures that the party has at least the given number of all potion types.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>QuestItems</maml:name>
+          <maml:Description>
+            <maml:para>Ensures that the party has the Scepter, Crown, Amulet, Sandalwood Box, and the three Shards.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Spells</maml:name>
+          <maml:Description>
+            <maml:para>Ensures that the party has at least the given number of all spell types.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Set-U5CommonSettings</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>BasicSupplies</maml:name>
+          <maml:Description>
+            <maml:para>Ensures that the party has at least 400 Food, at least 1000 Gold, at least 75 Karma, and at least 40 Gems, Keys, SkullKeys, and Torches.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Food</maml:name>
+          <maml:Description>
+            <maml:para>Gives the party the given amount of food (0-9999).  Overrides `-BasicSupplies` if that is also in effect.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Gold</maml:name>
+          <maml:Description>
+            <maml:para>Gives the party the given amount of gold (0-9999).  Overrides `-BasicSupplies` if that is also in effect.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Healthy</maml:name>
+          <maml:Description>
+            <maml:para>Ensures that all party members are in (G)ood condition and that their HP is equal to their maximum HP.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LiteralPath</maml:name>
+          <maml:Description>
+            <maml:para>The path to an on-disk saved game file to modify in place.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>"SAVED.GAM"</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OnDisk</maml:name>
+          <maml:Description>
+            <maml:para>Indicates that, rather than taking an object as input, the cmdlet should load and save a saved-game file from disk.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Potions</maml:name>
+          <maml:Description>
+            <maml:para>Ensures that the party has at least the given number of all potion types.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>QuestItems</maml:name>
+          <maml:Description>
+            <maml:para>Ensures that the party has the Scepter, Crown, Amulet, Sandalwood Box, and the three Shards.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Spells</maml:name>
+          <maml:Description>
+            <maml:para>Ensures that the party has at least the given number of all spell types.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>BasicSupplies</maml:name>
+        <maml:Description>
+          <maml:para>Ensures that the party has at least 400 Food, at least 1000 Gold, at least 75 Karma, and at least 40 Gems, Keys, SkullKeys, and Torches.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Food</maml:name>
+        <maml:Description>
+          <maml:para>Gives the party the given amount of food (0-9999).  Overrides `-BasicSupplies` if that is also in effect.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Gold</maml:name>
+        <maml:Description>
+          <maml:para>Gives the party the given amount of gold (0-9999).  Overrides `-BasicSupplies` if that is also in effect.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Healthy</maml:name>
+        <maml:Description>
+          <maml:para>Ensures that all party members are in (G)ood condition and that their HP is equal to their maximum HP.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>InputObject</maml:name>
+        <maml:Description>
+          <maml:para>This is the saved game object to modify, usually loaded via `Get-U5SavedGame`.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
+        <dev:type>
+          <maml:name>PSObject</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>LiteralPath</maml:name>
+        <maml:Description>
+          <maml:para>The path to an on-disk saved game file to modify in place.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>"SAVED.GAM"</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>OnDisk</maml:name>
+        <maml:Description>
+          <maml:para>Indicates that, rather than taking an object as input, the cmdlet should load and save a saved-game file from disk.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Potions</maml:name>
+        <maml:Description>
+          <maml:para>Ensures that the party has at least the given number of all potion types.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>QuestItems</maml:name>
+        <maml:Description>
+          <maml:para>Ensures that the party has the Scepter, Crown, Amulet, Sandalwood Box, and the three Shards.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Spells</maml:name>
+        <maml:Description>
+          <maml:para>Ensures that the party has at least the given number of all spell types.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\U5&gt; Get-U5SavedGame | Set-U5CommonSettings -BasicSupplies | Update-U5SavedGame -BackupOriginal</dev:code>
+        <dev:remarks>
+          <maml:para>This command reads in the default saved game ("SAVED.GAM"), updates key supplies like food and keys to make sure the party has some of each, and then saves it to disk.  A backup of the original is made as "SAVED.GAM.BAK".</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\U5&gt; Set-U5CommonSettings -OnDisk -BasicSupplies</dev:code>
+        <dev:remarks>
+          <maml:para>Note that, when no additional manipulation of the file is needed, it is simpler to use the `-OnDisk` interface.  This example is equivalent to example 1.  The reason to use the more complicated form in example 1 is if you want to examine or further manipulate the saved game object returned from `Get-U5SavedGame`.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Update-U5SavedGame</command:name>
+      <command:verb>Update</command:verb>
+      <command:noun>U5SavedGame</command:noun>
+      <maml:description>
+        <maml:para>Writes a changed Ultima V saved game to disk for use in the game.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Writes an Ultima V saved game object to disk, optionally backing up the original file if it exists.  The input saved game will typically originate from a call to `Get-U5SavedGame.`  If an output path is not given, the original filename stored in the input object is used.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Update-U5SavedGame</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+          <maml:name>OutPath</maml:name>
+          <maml:Description>
+            <maml:para>The name of the output file.  If not given, the original source filename stored in the input object is used.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+          <maml:name>InputObject</maml:name>
+          <maml:Description>
+            <maml:para>The object representing the saved game, typically obtained from a prior call to `Get-U5SavedGame`.  This can be passed in on the pipeline.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
+          <dev:type>
+            <maml:name>PSObject</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>BackupOriginal</maml:name>
+          <maml:Description>
+            <maml:para>If set, a copy of the output file is made prior to being overwritten.  The backup has the same name as the original, but with a ".BAK" extension added.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:Description>
+            <maml:para>Prompts you for confirmation before allowing the program to write changes.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:Description>
+            <maml:para>Goes through the motions of executing the command, without actually changing anything on disk.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>BackupOriginal</maml:name>
+        <maml:Description>
+          <maml:para>If set, a copy of the output file is made prior to being overwritten.  The backup has the same name as the original, but with a ".BAK" extension added.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:Description>
+          <maml:para>Prompts you for confirmation before allowing the program to write changes.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+        <maml:name>OutPath</maml:name>
+        <maml:Description>
+          <maml:para>The name of the output file.  If not given, the original source filename stored in the input object is used.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+        <maml:name>InputObject</maml:name>
+        <maml:Description>
+          <maml:para>The object representing the saved game, typically obtained from a prior call to `Get-U5SavedGame`.  This can be passed in on the pipeline.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">PSObject</command:parameterValue>
+        <dev:type>
+          <maml:name>PSObject</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:Description>
+          <maml:para>Goes through the motions of executing the command, without actually changing anything on disk.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-U5SavedGame | Set-U5CommonSettings -Food 800 | Update-U5SavedGame -BackupOriginal</dev:code>
+        <dev:remarks>
+          <maml:para>Reads `SAVED.GAM`, sets the food to 800, and saves it back to `SAVED.GAM`, backing up the original as `SAVED.GAM.BAK`.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+</helpItems>
